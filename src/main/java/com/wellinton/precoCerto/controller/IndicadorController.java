@@ -1,5 +1,6 @@
 package com.wellinton.precoCerto.controller;
 
+import com.wellinton.precoCerto.entity.indicador.Indicador;
 import com.wellinton.precoCerto.entity.indicador.IndicadorDTO;
 import com.wellinton.precoCerto.repository.IndicadorRepository;
 import com.wellinton.precoCerto.entity.indicador.IndicadorResponseDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -32,6 +34,16 @@ public class IndicadorController  {
         public ResponseEntity listarIndicadores(){
             List<IndicadorResponseDTO> todosIndicadores = this.indicadorRepository.findAll().stream().map(IndicadorResponseDTO::new).toList();
             return ResponseEntity.ok(todosIndicadores);
+        }
+        
+        @GetMapping("/{id}")
+        public ResponseEntity buscarIndicador(@PathVariable Long id){
+            Indicador indicador = this.indicadorRepository.findById(id)
+                    .orElseThrow(()->  new IllegalArgumentException("Indicador não encontrado"));
+            
+            IndicadorResponseDTO response = new IndicadorResponseDTO(indicador.getDescription(), indicador.getId());
+            
+            return ResponseEntity.ok(response);
         }
         
         @PostMapping("/cadastrar")

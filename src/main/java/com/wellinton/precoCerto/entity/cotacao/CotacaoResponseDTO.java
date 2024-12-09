@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Record.java to edit this template
  */
 package com.wellinton.precoCerto.entity.cotacao;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wellinton.precoCerto.entity.indicador.IndicadorResponseDTO;
 
 import java.time.LocalDateTime;
@@ -31,7 +30,6 @@ public record CotacaoResponseDTO(Long id, IndicadorResponseDTO indicadorResponse
          return indicadorResponseDTO;
      }
      
-     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
      public LocalDateTime getDataHora() {
          return dataHora;
      }

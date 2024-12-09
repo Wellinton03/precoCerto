@@ -27,11 +27,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/login").permitAll()
-                    .requestMatchers("/api/indicador/**").permitAll()
+                    .requestMatchers("/api/indicador**").permitAll()
                     .requestMatchers("/api/cotacao/**").permitAll()
                     .requestMatchers("/api/auth/cadastrar").hasRole("admin")
-                    .requestMatchers("/api/**").hasRole("admin")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
