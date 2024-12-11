@@ -76,7 +76,7 @@ public class Cotacao {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 31 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -94,6 +94,8 @@ public class Cotacao {
         final Cotacao other = (Cotacao) obj;
         return Objects.equals(this.id, other.id);
     }
+
+    
 
     
     
