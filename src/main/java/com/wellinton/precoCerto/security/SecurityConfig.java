@@ -3,6 +3,7 @@ package com.wellinton.precoCerto.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,10 +28,12 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/login").permitAll()
-                    .requestMatchers("/api/indicador**").permitAll()
-                    .requestMatchers("/api/cotacao/**").permitAll()
-                    .requestMatchers("/api/auth/cadastrar").hasRole("admin")
-                .anyRequest().permitAll()
+                .requestMatchers("/api/auth/cadastrar").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/indicador/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/cotacao/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 

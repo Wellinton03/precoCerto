@@ -1,7 +1,6 @@
 package com.wellinton.precoCerto.controller;
 
 import com.wellinton.precoCerto.entity.cotacao.CotacaoDTO;
-import com.wellinton.precoCerto.entity.cotacao.CotacaoResponseDTO;
 import com.wellinton.precoCerto.repository.CotacaoRepository;
 import com.wellinton.precoCerto.service.CotacaoService;
 import jakarta.validation.Valid;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +28,7 @@ public class CotacaoController {
     
     @GetMapping("/listar")
     public ResponseEntity listarCotacoes() {
-        List<CotacaoResponseDTO> todasCotacoes = this.cotacaoRepository.findAll().stream().map(CotacaoResponseDTO::new).toList();
+        List<CotacaoDTO> todasCotacoes = this.cotacaoRepository.findAll().stream().map(CotacaoDTO::new).toList();
         return ResponseEntity.ok(todasCotacoes);
         
     }
@@ -36,6 +36,7 @@ public class CotacaoController {
     @PostMapping("/cadastrar")
     public ResponseEntity salvar(@RequestBody @Valid CotacaoDTO data) {
         try {
+            System.out.println(data.toString());
             this.cotacaoService.salvar(data);
             return ResponseEntity.ok().build();
             
@@ -55,10 +56,10 @@ public class CotacaoController {
         }
     }
     
-    @DeleteMapping("/excluir")
-    public ResponseEntity excluir(@RequestBody @Valid CotacaoDTO data) {
+    @DeleteMapping("/excluir/{id}")
+    public ResponseEntity excluir(@PathVariable Long id) {
        try{
-        this.cotacaoService.excluir(data);
+        this.cotacaoService.excluir(id);
             return ResponseEntity.ok().build();
             
        }catch (IllegalArgumentException e) {

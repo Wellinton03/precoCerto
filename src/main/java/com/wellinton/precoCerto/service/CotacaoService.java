@@ -21,28 +21,28 @@ public class CotacaoService{
     
     @Transactional
     public Cotacao salvar(CotacaoDTO data) {
-       Indicador indicador = indicadorRepository.findByDescription(data.description())
+       Indicador indicador = indicadorRepository.findById(data.getIndicadorDTO().getId())
             .orElseThrow(() -> new IllegalArgumentException("Indicador não encontrado"));
 
     Cotacao cotacao;
 
-    if (data.id() != null) { 
-        cotacao = cotacaoRepository.findById(data.id())
+    if (data.getId() != null) { 
+        cotacao = cotacaoRepository.findById(data.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Cotação não encontrada"));
 
         cotacao.setIndicador(indicador);
-        cotacao.setDataHora(data.dataHora());
-        cotacao.setValor(data.valor());
+        cotacao.setDataHora(data.getDataHora());
+        cotacao.setValor(data.getValor());
     } else { 
-        cotacao = new Cotacao(indicador, data.dataHora(), data.valor());
+        cotacao = new Cotacao(indicador, data.getDataHora(), data.getValor());
     }
         return cotacaoRepository.save(cotacao);
     }
     
     
     @Transactional
-    public void excluir(CotacaoDTO data) {
-         Cotacao cotacao = this.cotacaoRepository.findById(data.id())
+    public void excluir(Long id) {
+         Cotacao cotacao = this.cotacaoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cotaão não encontrada"));
                 
         cotacaoRepository.delete(cotacao);

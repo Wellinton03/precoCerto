@@ -30,6 +30,13 @@ public class Usuario implements UserDetails{
             this.password = password;
             this.role = role;
         }
+        
+        public Usuario( String username, String email, String password, UserRole role){
+            this.username = username;
+            this.email = email;
+            this.password = password;
+            this.role = role;
+        }
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

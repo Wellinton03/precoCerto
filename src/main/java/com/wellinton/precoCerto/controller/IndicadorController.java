@@ -3,7 +3,6 @@ package com.wellinton.precoCerto.controller;
 import com.wellinton.precoCerto.entity.indicador.Indicador;
 import com.wellinton.precoCerto.entity.indicador.IndicadorDTO;
 import com.wellinton.precoCerto.repository.IndicadorRepository;
-import com.wellinton.precoCerto.entity.indicador.IndicadorResponseDTO;
 import com.wellinton.precoCerto.service.IndicadorService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,7 +30,7 @@ public class IndicadorController  {
 	
         @GetMapping("/listar")
         public ResponseEntity listarIndicadores(){
-            List<IndicadorResponseDTO> todosIndicadores = this.indicadorRepository.findAll().stream().map(IndicadorResponseDTO::new).toList();
+            List<IndicadorDTO> todosIndicadores = this.indicadorRepository.findAll().stream().map(IndicadorDTO::new).toList();
             return ResponseEntity.ok(todosIndicadores);
         }
         
@@ -40,7 +39,7 @@ public class IndicadorController  {
             Indicador indicador = this.indicadorRepository.findById(id)
                     .orElseThrow(()->  new IllegalArgumentException("Indicador não encontrado"));
             
-            IndicadorResponseDTO response = new IndicadorResponseDTO(indicador.getDescription(), indicador.getId());
+            IndicadorDTO response = new IndicadorDTO(indicador);
             
             return ResponseEntity.ok(response);
         }
@@ -71,7 +70,6 @@ public class IndicadorController  {
         @DeleteMapping("/excluir/{id}")
         public ResponseEntity excluir(@PathVariable Long id) {
                 try{
-                    System.out.println(id);
                     this.indicadorService.excluir(id);
                     return ResponseEntity.ok().build();
                 } catch (IllegalArgumentException e) {
