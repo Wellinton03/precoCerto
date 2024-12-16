@@ -27,12 +27,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/cadastrar").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/indicador/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/cotacao/**").permitAll()
-                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/indicador/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/api/cotacao/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

@@ -43,7 +43,7 @@ public class CotacaoService{
     @Transactional
     public void excluir(Long id) {
          Cotacao cotacao = this.cotacaoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cotaão não encontrada"));
+                .orElseThrow(() -> new IllegalArgumentException("Cotação não encontrada"));
                 
         cotacaoRepository.delete(cotacao);
     }

@@ -12,10 +12,12 @@ import com.wellinton.precoCerto.entity.user.Usuario;
 import jakarta.validation.Valid;
 import com.wellinton.precoCerto.entity.user.AuthenticationDTO;
 import com.wellinton.precoCerto.entity.user.LoginDTO;
-import com.wellinton.precoCerto.service.UsuarioService;
+import com.wellinton.precoCerto.entity.user.UserRole;
+import com.wellinton.precoCerto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @RestController
@@ -28,17 +30,21 @@ public class AuthenticationController {
         @Autowired
         private AuthenticationManager authenticationManager;
         
-        @Autowired
-	private UsuarioService usuarioService;
+         @Autowired
+        private UsuarioRepository repository;
         
 	@PostMapping("/cadastrar")
 	public ResponseEntity register(@Valid @RequestBody AuthenticationDTO data) {
-		if(data.getUsername() == null || data.getPassword() == null || data.getRole() == null) {
-                 
-                    return ResponseEntity.badRequest().body("Valores não foram preenchidos corretamente");
-                }
-                    
-                usuarioService.salvarUsuario(data);
+		if(this.repository.findByUsername(data.getUsername()) != null)
+                    return ResponseEntity.badRequest().build();
+                
+                String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
+                UserRole role = UserRole.valueOf(data.getRole().toUpperCase());
+                System.out.println("Role adicionada " + role); 
+                Usuario usuario = new Usuario(data.getUsername(), encryptedPassword, role, data.getEmail());
+                
+                this.repository.save(usuario);
+                
                 return ResponseEntity.ok().build();
         
         }

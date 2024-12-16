@@ -2,6 +2,8 @@ package com.wellinton.precoCerto.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,12 +33,12 @@ public class Usuario implements UserDetails{
             this.role = role;
         }
         
-        public Usuario( String username, String email, String password, UserRole role){
-            this.username = username;
-            this.email = email;
-            this.password = password;
-            this.role = role;
-        }
+        public Usuario(String username, String password, UserRole role, String email) {
+		this.username = username;
+		this.password = password;
+		this.role = role;
+                this.email = email;
+	}
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,17 +59,11 @@ public class Usuario implements UserDetails{
 	@NotBlank(message = "A Senha é obrigatória")
 	private String password;
         
+        @Enumerated(EnumType.STRING)
         @Column(name = "role", nullable = false)
         private UserRole role;
 	
         
-	public Usuario(String username, String password, UserRole role, String email) {
-		this.username = username;
-		this.password = password;
-		this.role = role;
-                this.email = email;
-	}
-
     public Long getId() {
         return id;
     }
@@ -125,12 +121,13 @@ public class Usuario implements UserDetails{
         
         
         
-
-	@Override
+@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
                 else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
+
+
 
 	@Override
 	public String getUsername() {
@@ -156,5 +153,12 @@ public class Usuario implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", role=" + role + '}';
+    }
+        
+        
         
 }
